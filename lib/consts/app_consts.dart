@@ -1,0 +1,9 @@
+export './app_colors.dart';
+export './app_images.dart';
+export './app_strings.dart';
+export './app_styles.dart';
+export './app_lists.dart';
+export './app_firebase.dart';
+export 'package:velocity_x/velocity_x.dart';
+export 'package:flutter/material.dart';
+export 'package:get/get.dart';
