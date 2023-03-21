@@ -2,7 +2,6 @@ import 'package:emart/views/common/custom_app_logo.dart';
 import 'package:emart/views/common/custom_background.dart';
 import 'package:emart/views/common/custom_button.dart';
 import 'package:emart/views/common/custom_text_field.dart';
-import 'package:emart/views/main/main_view.dart';
 
 import '../../consts/app_consts.dart';
 import '../../controllers/auth_controller.dart';
@@ -21,6 +20,27 @@ class _LoginViewState extends State<LoginView> {
 
   var controller = Get.put(AuthController());
 
+  final formKey = GlobalKey<FormState>();
+
+  login() {
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+      controller.login(
+        email: emailController.text,
+        password: passwordController.text,
+        context: context,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+  
+  
   @override
   Widget build(BuildContext context) {
     return CustomBackground(
@@ -37,17 +57,24 @@ class _LoginViewState extends State<LoginView> {
                 15.heightBox,
                 Column(
                   children: [
-                    CustomTextField(
-                      title: AppStrings.email,
-                      hint: AppStrings.emailHint,
-                      controller: emailController,
-                    ),
-                    10.heightBox,
-                    CustomTextField(
-                      title: AppStrings.password,
-                      hint: AppStrings.passwordHint,
-                      controller: passwordController,
-                      isPassword: true,
+                    Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          CustomTextField(
+                            title: AppStrings.email,
+                            hint: AppStrings.emailHint,
+                            controller: emailController,
+                          ),
+                          10.heightBox,
+                          CustomTextField(
+                            title: AppStrings.password,
+                            hint: AppStrings.passwordHint,
+                            controller: passwordController,
+                            isPassword: true,
+                          ),
+                        ],
+                      ),
                     ),
                     Align(
                       alignment: AlignmentDirectional.centerEnd,
@@ -60,14 +87,7 @@ class _LoginViewState extends State<LoginView> {
                       () => controller.isLoading.value
                           ? const Center(child: CircularProgressIndicator())
                           : CustomButton(
-                              onPressed: () {
-                                controller.isLoading(true);
-                                controller.login(
-                                  email: emailController.text,
-                                  password: passwordController.text,
-                                  context: context,
-                                );
-                              },
+                              onPressed: login,
                               text: AppStrings.login,
                             ),
                     ),
@@ -81,21 +101,6 @@ class _LoginViewState extends State<LoginView> {
                       text: AppStrings.signUp,
                       color: AppColors.lightGolden,
                       textColor: AppColors.redColor,
-                    ),
-                    5.heightBox,
-                    AppStrings.loginWith.text.color(AppColors.fontGrey).make(),
-                    5.heightBox,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: AppLists.loginMethods
-                          .map(
-                            (e) => CircleAvatar(
-                              radius: 25,
-                              backgroundColor: AppColors.lightGrey,
-                              child: Image.asset(e, width: 35),
-                            ),
-                          )
-                          .toList(),
                     ),
                   ],
                 )

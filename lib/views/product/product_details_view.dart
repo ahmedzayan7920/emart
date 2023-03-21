@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emart/controllers/product_controller.dart';
 import 'package:emart/models/product_model.dart';
-import 'package:emart/views/chat/chat_view.dart';
+import 'package:emart/services/firestore_services.dart';
+import 'package:emart/views/chat/messages_view.dart';
+import 'package:emart/views/product/shipping_info_view.dart';
 
 import '../../consts/app_consts.dart';
 import '../common/custom_button.dart';
@@ -22,8 +25,10 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
   void initState() {
     controller.isFavorite(widget.product.wishlist.contains(AppFirebase.currentUser!.uid));
     controller.totalPrice(controller.quantity.value * widget.product.price.toDouble());
+    controller.product = widget.product;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +47,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                 controller.addToWishlist(id: widget.product.id);
               },
               icon: Icon(controller.isFavorite.value ? Icons.favorite : Icons.favorite_outline),
-              color: controller.isFavorite.value ? AppColors.redColor:AppColors.darkFontGrey,
+              color: controller.isFavorite.value ? AppColors.redColor : AppColors.darkFontGrey,
             ),
           ),
         ],
@@ -117,7 +122,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                           child: IconButton(
                             onPressed: () {
                               Get.to(
-                                () => ChatView(
+                                () => MessagesView(
                                   sellerId: widget.product.sellerId,
                                   sellerName: widget.product.seller,
                                 ),
@@ -193,21 +198,11 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                                 children: [
                                   IconButton(
                                     onPressed: () => controller.decreaseQuantity(product: widget.product),
-                                    // onPressed: controller.quantity.value == 1
-                                    //     ? null
-                                    //     : () {
-                                    //         controller.quantity.value -= 1;
-                                    //       },
                                     icon: const Icon(Icons.remove),
                                   ),
                                   controller.quantity.value.text.size(16).make(),
                                   IconButton(
                                     onPressed: () => controller.increaseQuantity(product: widget.product),
-                                    // onPressed: !(product.quantity - controller.quantity.value > 0)
-                                    //     ? null
-                                    //     : () {
-                                    //         controller.quantity.value += 1;
-                                    //       },
                                     icon: const Icon(Icons.add),
                                   ),
                                   10.widthBox,
@@ -227,64 +222,50 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                               child: "Total: ".text.color(AppColors.textFieldGrey).make(),
                             ),
                             15.widthBox,
-                            Obx(
-                              () => "\$${controller.totalPrice.value}"
-                                  .text
-                                  .color(AppColors.redColor)
-                                  .fontFamily(AppStyles.bold)
-                                  .size(16)
-                                  .make(),
+                            Column(
+                              children: [
+                                // Obx(
+                                //   () => "\$${controller.totalPrice.value + widget.product.shippingPrice}"
+                                //       .text
+                                //       .color(AppColors.redColor)
+                                //       .fontFamily(AppStyles.bold)
+                                //       .size(16)
+                                //       .make(),
+                                // ),
+                                Row(
+                                  children: [
+                                    Obx(
+                                      () => "\$${controller.totalPrice.value}"
+                                          .text
+                                          .color(AppColors.redColor)
+                                          .fontFamily(AppStyles.bold)
+                                          .size(16)
+                                          .make(),
+                                    ),
+                                    " + \$${widget.product.shippingPrice}"
+                                        .text
+                                        .color(AppColors.redColor)
+                                        .fontFamily(AppStyles.bold)
+                                        .size(16)
+                                        .make(),
+                                    5.widthBox,
+                                    "(for shipping)".text.color(AppColors.textFieldGrey).make(),
+                                  ],
+                                ),
+                              ],
                             ),
                           ],
                         ).box.padding(const EdgeInsets.all(8)).make(),
                       ],
                     ).box.white.roundedSM.shadowSm.make(),
                     10.heightBox,
-                    "Description".text.fontFamily(AppStyles.semiBold).color(AppColors.darkFontGrey).make(),
+                    "Description".text.size(18).fontFamily(AppStyles.semiBold).color(AppColors.darkFontGrey).make(),
                     10.heightBox,
                     widget.product.description.text.color(AppColors.darkFontGrey).make(),
-                    10.heightBox,
-                    ListTile(
-                      title: "Video".text.color(AppColors.darkFontGrey).fontFamily(AppStyles.semiBold).make(),
-                      trailing: const Icon(Icons.arrow_forward),
-                    ),
-                    10.heightBox,
-                    ListTile(
-                      title:
-                          "Reviews".text.color(AppColors.darkFontGrey).fontFamily(AppStyles.semiBold).make(),
-                      trailing: const Icon(Icons.arrow_forward),
-                    ),
-                    10.heightBox,
-                    ListTile(
-                      title: "Seller Policy"
-                          .text
-                          .color(AppColors.darkFontGrey)
-                          .fontFamily(AppStyles.semiBold)
-                          .make(),
-                      trailing: const Icon(Icons.arrow_forward),
-                    ),
-                    10.heightBox,
-                    ListTile(
-                      title: "Return Policy"
-                          .text
-                          .color(AppColors.darkFontGrey)
-                          .fontFamily(AppStyles.semiBold)
-                          .make(),
-                      trailing: const Icon(Icons.arrow_forward),
-                    ),
-                    10.heightBox,
-                    ListTile(
-                      title: "Support Policy"
-                          .text
-                          .color(AppColors.darkFontGrey)
-                          .fontFamily(AppStyles.semiBold)
-                          .make(),
-                      trailing: const Icon(Icons.arrow_forward),
-                    ),
                     20.heightBox,
                     "Products you may like"
                         .text
-                        .size(16)
+                        .size(18)
                         .color(AppColors.darkFontGrey)
                         .fontFamily(AppStyles.bold)
                         .make(),
@@ -292,54 +273,79 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                     SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: List.generate(
-                          6,
-                          (index) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.asset(
-                                  AppImages.imgP1,
-                                  width: 120,
-                                  fit: BoxFit.cover,
+                      child: FutureBuilder<QuerySnapshot>(
+                          future: FirestoreServices.getProductsYouMayLike(
+                            id: widget.product.id,
+                            subCategory: widget.product.subCategory,
+                          ),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              List<ProductModel> products = List.from(
+                                snapshot.data!.docs.map(
+                                  (e) => ProductModel.fromMap(e.data() as Map<String, dynamic>),
                                 ),
-                                10.heightBox,
-                                "Laptop 4GB/64GB"
-                                    .text
-                                    .color(AppColors.darkFontGrey)
-                                    .fontFamily(AppStyles.semiBold)
-                                    .make(),
-                                10.heightBox,
-                                "\$600"
-                                    .text
-                                    .color(AppColors.redColor)
-                                    .fontFamily(AppStyles.bold)
-                                    .size(16)
-                                    .make(),
-                              ],
-                            )
-                                .box
-                                .white
-                                .roundedSM
-                                .shadowSm
-                                .padding(const EdgeInsets.all(8))
-                                .margin(const EdgeInsets.all(6))
-                                .make();
-                          },
-                        ),
-                      ),
+                              );
+                              print(products.length);
+                              if (products.isNotEmpty) {
+                                return Row(
+                                  children: List.generate(
+                                    products.length,
+                                        (index) {
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          CachedNetworkImage(
+                                            imageUrl: products[index].images.first,
+                                            height: 120,
+                                            width: 120,
+                                            fit: BoxFit.cover,
+                                          ),
+                                          10.heightBox,
+                                          products[index]
+                                              .name
+                                              .text
+                                              .color(AppColors.darkFontGrey)
+                                              .fontFamily(AppStyles.semiBold)
+                                              .make(),
+                                          10.heightBox,
+                                          "\$${products[index].price}"
+                                              .text
+                                              .color(AppColors.redColor)
+                                              .fontFamily(AppStyles.bold)
+                                              .size(16)
+                                              .make(),
+                                        ],
+                                      )
+                                          .box
+                                          .white
+                                          .roundedSM
+                                          .shadowSm
+                                          .padding(const EdgeInsets.all(8))
+                                          .margin(const EdgeInsets.all(6))
+                                          .make();
+                                    },
+                                  ),
+                                );
+                              } else {
+                                return "No Similar Products".text.size(16).fontFamily(AppStyles.semiBold).make();
+                              }
+
+                            } else {
+                              return const Center(child: CircularProgressIndicator());
+                            }
+
+                          }),
                     ),
-                    10.heightBox,
                   ],
                 ),
               ),
             ),
+            10.heightBox,
             CustomButton(
               onPressed: () {
-                controller.addToCart(product: widget.product);
+                Get.to(() => const ShippingInfoView());
               },
-              text: "Add to Cart",
+              text: "Buy",
             ),
           ],
         ),

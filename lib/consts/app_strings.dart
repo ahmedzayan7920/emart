@@ -23,6 +23,9 @@ abstract class AppStrings {
   static const categories = "Categories";
   static const cart = "Cart";
   static const profile = "Profile";
+  static const products = "Products";
+  static const orders = "Orders";
+  static const settings = "Settings";
 
 
   static const searchAnything = "Search anything...";

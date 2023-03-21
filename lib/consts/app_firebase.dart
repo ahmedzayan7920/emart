@@ -9,8 +9,9 @@ abstract class AppFirebase{
 
   static const String usersCollection = "users";
   static const String productsCollection = "products";
-  static const String cartCollection = "cart";
   static const String chatsCollection = "chats";
   static const String messagesCollection = "messages";
+  static const String addressesCollection = "addresses";
+  static const String ordersCollection = "orders";
 
 }

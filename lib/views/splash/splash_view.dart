@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:emart/services/firestore_services.dart';
 import 'package:emart/views/auth/login_view.dart';
 import 'package:emart/views/common/custom_app_logo.dart';
 import 'package:emart/views/main/main_view.dart';
+import 'package:emart/views/seller/main/seller_main_view.dart';
 
 import '../../consts/app_consts.dart';
 
@@ -16,11 +19,16 @@ class _SplashViewState extends State<SplashView> {
     Future.delayed(
       const Duration(seconds: 3),
       () {
-        AppFirebase.auth.authStateChanges().listen((user) {
+        AppFirebase.auth.authStateChanges().listen((user) async{
           if(user == null){
             Get.off(()=>const LoginView());
           }else {
-            Get.off(() => const MainView());
+           final DocumentSnapshot<Map<String, dynamic>> data = await FirestoreServices.getUserRole(id: user.uid);
+            if (data.data()!["isUser"].toString() == "true"){
+              Get.offAll(() => const MainView());
+            }else{
+              Get.offAll(() => const SellerMainView());
+            }
           }
         });
       },

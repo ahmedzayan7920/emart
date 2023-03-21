@@ -9,10 +9,6 @@ class ProfileController extends GetxController {
   var profileImagePath = "".obs;
   var profileImageUrL = "";
 
-  final nameController = TextEditingController();
-  final oldPasswordController = TextEditingController();
-  final newPasswordController = TextEditingController();
-
   var isLoading = false.obs;
 
   pickProfileImage() async {
@@ -27,16 +23,21 @@ class ProfileController extends GetxController {
     profileImageUrL = await ref.getDownloadURL();
   }
 
-  updateProfile({required BuildContext context}) async {
+  updateProfile({
+    required String name,
+    required String oldPassword,
+    required String newPassword,
+    required BuildContext context,
+  }) async {
     isLoading(true);
     try {
-      if (newPasswordController.text.isNotEmpty && oldPasswordController.text.isNotEmpty) {
+      if (oldPassword.isNotEmpty || newPassword.isNotEmpty) {
         var credential = EmailAuthProvider.credential(
           email: AppFirebase.currentUser!.email!,
-          password: oldPasswordController.text,
+          password: oldPassword,
         );
         await AppFirebase.currentUser!.reauthenticateWithCredential(credential);
-        await AppFirebase.currentUser!.updatePassword(newPasswordController.text);
+        await AppFirebase.currentUser!.updatePassword(newPassword);
       }
       if (profileImagePath.isNotEmpty) {
         await uploadProfileImage();
@@ -44,7 +45,7 @@ class ProfileController extends GetxController {
             .collection(AppFirebase.usersCollection)
             .doc(AppFirebase.currentUser!.uid)
             .update({
-          "name": nameController.text,
+          "name": name,
           "profileUrl": profileImageUrL,
         });
       } else {
@@ -52,13 +53,12 @@ class ProfileController extends GetxController {
             .collection(AppFirebase.usersCollection)
             .doc(AppFirebase.currentUser!.uid)
             .update({
-          "name": nameController.text,
+          "name": name,
         });
       }
       isLoading(false);
       Get.back();
     } on FirebaseAuthException catch (error) {
-      print(error.message);
       VxToast.show(context, msg: error.message ?? error.toString());
     } on FirebaseException catch (error) {
       VxToast.show(context, msg: error.message ?? error.toString());

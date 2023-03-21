@@ -4,7 +4,9 @@ class CustomTextField extends StatelessWidget {
   const CustomTextField({
     Key? key,
     required this.title,
-    required this.hint, required this.controller,  this.isPassword = false,
+    required this.hint,
+    required this.controller,
+    this.isPassword = false,
   }) : super(key: key);
 
   final String title;
@@ -20,17 +22,35 @@ class CustomTextField extends StatelessWidget {
         title.text.color(AppColors.redColor).fontFamily(AppStyles.semiBold).size(16).make(),
         5.heightBox,
         TextFormField(
-          // initialValue: controller.text,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return "$title Can't be Empty";
+            }
+            return null;
+          },
           controller: controller,
           obscureText: isPassword,
-          decoration:  InputDecoration(
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
             hintText: hint,
-            // hintStyle: const TextStyle(color: AppColors.textFieldGrey),
-            isDense: true,
+            // isDense: true,
             fillColor: AppColors.lightGrey,
             filled: true,
             border: InputBorder.none,
+            errorBorder: const OutlineInputBorder(
+              gapPadding: 0,
+              borderSide: BorderSide(
+                color: AppColors.redColor,
+              ),
+            ),
+            focusedErrorBorder: const OutlineInputBorder(
+              gapPadding: 0,
+              borderSide: BorderSide(
+                color: AppColors.redColor,
+              ),
+            ),
             focusedBorder: const OutlineInputBorder(
+              gapPadding: 0,
               borderSide: BorderSide(
                 color: AppColors.redColor,
               ),

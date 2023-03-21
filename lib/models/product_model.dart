@@ -5,9 +5,10 @@ class ProductModel {
   final String subCategory;
   final String description;
   final num price;
+  final num shippingPrice;
   final num rating;
   final num quantity;
-  final List<num> colors;
+  final List<int> colors;
   final List<String> images;
   final List<String> wishlist;
   final String seller;
@@ -20,6 +21,7 @@ class ProductModel {
     required this.subCategory,
     required this.description,
     required this.price,
+    required this.shippingPrice,
     required this.rating,
     required this.quantity,
     required this.colors,
@@ -37,6 +39,7 @@ class ProductModel {
       'subCategory': subCategory,
       'description': description,
       'price': price,
+      'shippingPrice': shippingPrice,
       'rating': rating,
       'quantity': quantity,
       'colors': colors,
@@ -55,9 +58,10 @@ class ProductModel {
       subCategory: map['subCategory'] as String,
       description: map['description'] as String,
       price: map['price'] as num,
+      shippingPrice: map['shippingPrice'] as num,
       rating: map['rating'] as num,
       quantity: map['quantity'] as num,
-      colors: (map['colors'] as List).map((e) => e as num).toList(),
+      colors: (map['colors'] as List).map((e) => e as int).toList(),
       images: (map['images'] as List).map((dynamic e) => e as String).toList(),
       wishlist: (map['wishlist'] as List).map((e) => e as String).toList(),
       seller: map['seller'] as String,

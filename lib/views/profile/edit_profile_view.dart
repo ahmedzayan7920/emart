@@ -19,18 +19,47 @@ class EditProfileView extends StatefulWidget {
 }
 
 class _EditProfileViewState extends State<EditProfileView> {
+  final nameController = TextEditingController();
+  final oldPasswordController = TextEditingController();
+  final newPasswordController = TextEditingController();
+
   final controller = Get.put(ProfileController());
+  final formKey = GlobalKey<FormState>();
+
+  updateProfile() {
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+      controller.updateProfile(
+        name: nameController.text,
+        oldPassword: oldPasswordController.text,
+        newPassword: newPasswordController.text,
+        context: context,
+      );
+    }
+  }
 
   @override
   void initState() {
-    controller.nameController.text = widget.userModel.name;
+    nameController.text = widget.userModel.name;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    oldPasswordController.dispose();
+    newPasswordController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return CustomBackground(
       child: Scaffold(
+        appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
+          title: "Edit Profile".text.white.fontFamily(AppStyles.semiBold).make(),
+        ),
         body: Center(
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
@@ -75,21 +104,24 @@ class _EditProfileViewState extends State<EditProfileView> {
                   ),
                 ),
                 10.heightBox,
-                CustomTextField(
-                  title: AppStrings.name,
-                  hint: AppStrings.nameHint,
-                  controller: controller.nameController,
+                Form(
+                  key: formKey,
+                  child: CustomTextField(
+                    title: AppStrings.name,
+                    hint: AppStrings.nameHint,
+                    controller: nameController,
+                  ),
                 ),
                 CustomTextField(
-                  title: AppStrings.password,
+                  title: "Old Password",
                   hint: AppStrings.passwordHint,
-                  controller: controller.oldPasswordController,
+                  controller: oldPasswordController,
                   isPassword: true,
                 ),
                 CustomTextField(
-                  title: AppStrings.password,
+                  title: "New Password",
                   hint: AppStrings.passwordHint,
-                  controller: controller.newPasswordController,
+                  controller: newPasswordController,
                   isPassword: true,
                 ),
                 20.heightBox,
@@ -97,9 +129,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   () => controller.isLoading.value
                       ? const Center(child: CircularProgressIndicator())
                       : CustomButton(
-                          onPressed: () {
-                            controller.updateProfile(context: context);
-                          },
+                          onPressed: updateProfile,
                           text: "Save",
                         ),
                 ),

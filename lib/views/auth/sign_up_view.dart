@@ -16,13 +16,35 @@ class SignUpView extends StatefulWidget {
 }
 
 class _SignUpViewState extends State<SignUpView> {
-  bool isChecked = false;
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final rePasswordController = TextEditingController();
 
   var controller = Get.put(AuthController());
+
+  final formKey = GlobalKey<FormState>();
+
+  signUp() {
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+      controller.signUp(
+        name: nameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+        context: context,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    rePasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,72 +62,102 @@ class _SignUpViewState extends State<SignUpView> {
                 15.heightBox,
                 Column(
                   children: [
-                    CustomTextField(
-                      title: AppStrings.name,
-                      hint: AppStrings.nameHint,
-                      controller: nameController,
+                    Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          CustomTextField(
+                            title: AppStrings.name,
+                            hint: AppStrings.nameHint,
+                            controller: nameController,
+                          ),
+                          10.heightBox,
+                          CustomTextField(
+                            title: AppStrings.email,
+                            hint: AppStrings.emailHint,
+                            controller: emailController,
+                          ),
+                          10.heightBox,
+                          CustomTextField(
+                            title: AppStrings.password,
+                            hint: AppStrings.passwordHint,
+                            controller: passwordController,
+                            isPassword: true,
+                          ),
+                          10.heightBox,
+                          CustomTextField(
+                            title: AppStrings.rePassword,
+                            hint: AppStrings.passwordHint,
+                            controller: rePasswordController,
+                            isPassword: true,
+                          ),
+                        ],
+                      ),
                     ),
-                    10.heightBox,
-                    CustomTextField(
-                      title: AppStrings.email,
-                      hint: AppStrings.emailHint,
-                      controller: emailController,
+                    Obx(
+                      () => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          RadioMenuButton<bool>(
+                            value: true,
+                            groupValue: controller.isUser.value,
+                            onChanged: (value) {
+                              controller.isUser(true);
+                            },
+                            child: "User".text.make(),
+                          ),
+                          RadioMenuButton<bool>(
+                            value: false,
+                            groupValue: controller.isUser.value,
+                            onChanged: (value) {
+                              controller.isUser(false);
+                            },
+                            child: "Seller".text.make(),
+                          ),
+                        ],
+                      ),
                     ),
-                    10.heightBox,
-                    CustomTextField(
-                      title: AppStrings.password,
-                      hint: AppStrings.passwordHint,
-                      controller: passwordController,
-                      isPassword: true,
-                    ),
-                    10.heightBox,
-                    CustomTextField(
-                      title: AppStrings.rePassword,
-                      hint: AppStrings.passwordHint,
-                      controller: rePasswordController,
-                      isPassword: true,
-                    ),
-                    CheckboxListTile(
-                      controlAffinity: ListTileControlAffinity.leading,
-                      activeColor: AppColors.redColor,
-                      value: isChecked,
-                      onChanged: (value) {
-                        setState(() {
-                          isChecked = value ?? false;
-                        });
-                      },
-                      title: RichText(
-                        text: const TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "I agree to the ",
-                              style: TextStyle(
-                                fontFamily: AppStyles.regular,
-                                color: AppColors.fontGrey,
+                    Obx(
+                      () => CheckboxListTile(
+                        controlAffinity: ListTileControlAffinity.leading,
+                        activeColor: AppColors.redColor,
+                        value: controller.isTermsAgreed.value,
+                        onChanged: (value) {
+                          controller.isTermsAgreed(value ?? false);
+                        },
+                        title: RichText(
+                          text: const TextSpan(
+                            children: [
+                              TextSpan(
+                                text: "I agree to the ",
+                                style: TextStyle(
+                                  fontFamily: AppStyles.regular,
+                                  color: AppColors.fontGrey,
+                                ),
                               ),
-                            ),
-                            TextSpan(
-                              text: AppStrings.termsAndConditions,
-                              style: TextStyle(
-                                fontFamily: AppStyles.regular,
-                                color: AppColors.redColor,
+                              TextSpan(
+                                text: AppStrings.termsAndConditions,
+                                style: TextStyle(
+                                  fontFamily: AppStyles.regular,
+                                  color: AppColors.redColor,
+                                ),
                               ),
-                            ),
-                            TextSpan(
-                              text: " & ",
-                              style: TextStyle(
-                                fontFamily: AppStyles.regular,
-                                color: AppColors.fontGrey,
+                              TextSpan(
+                                text: " & ",
+                                style: TextStyle(
+                                  fontFamily: AppStyles.regular,
+                                  color: AppColors.fontGrey,
+                                ),
                               ),
-                            ),
-                            TextSpan(
-                              text: AppStrings.privacyPolicy,
-                              style: TextStyle(
-                                fontFamily: AppStyles.regular,
-                                color: AppColors.redColor,
+                              TextSpan(
+                                text: AppStrings.privacyPolicy,
+                                style: TextStyle(
+                                  fontFamily: AppStyles.regular,
+                                  color: AppColors.redColor,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -113,17 +165,7 @@ class _SignUpViewState extends State<SignUpView> {
                       () => controller.isLoading.value
                           ? const Center(child: CircularProgressIndicator())
                           : CustomButton(
-                              onPressed: isChecked
-                                  ? () {
-                                      controller.isLoading(true);
-                                      controller.signUp(
-                                        name: nameController.text,
-                                        email: emailController.text,
-                                        password: passwordController.text,
-                                        context: context,
-                                      );
-                                    }
-                                  : null,
+                              onPressed: controller.isTermsAgreed.value ? signUp : null,
                               text: AppStrings.signUp,
                             ),
                     ),

@@ -1,12 +1,6 @@
 import 'package:emart/consts/app_consts.dart';
 
 abstract class AppLists {
-  static const loginMethods = [
-    AppImages.icFacebookLogo,
-    AppImages.icGoogleLogo,
-    AppImages.icTwitterLogo,
-  ];
-
   static const sliderItems = [
     AppImages.imgSlider1,
     AppImages.imgSlider2,

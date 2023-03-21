@@ -26,7 +26,7 @@ class CategoriesView extends StatelessWidget {
                 crossAxisCount: 3,
                 mainAxisSpacing: 8,
                 crossAxisSpacing: 8,
-                mainAxisExtent: 180,
+                mainAxisExtent: 190,
               ),
               itemBuilder: (context, index) {
                 return Column(
@@ -52,8 +52,8 @@ class CategoriesView extends StatelessWidget {
                     .clip(Clip.antiAlias)
                     .outerShadowSm
                     .make()
-                    .onInkTap(() {
-                      controller.getSubCategories(title: AppLists.categoriesTitles[index]);
+                    .onInkTap(() async {
+                  await controller.getSubCategories(title: AppLists.categoriesTitles[index]);
                   Get.to(() => CategoryDetailsView(title: AppLists.categoriesTitles[index]));
                 });
               },

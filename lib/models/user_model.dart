@@ -3,20 +3,14 @@ class UserModel {
   final String name;
   final String email;
   final String profileUrl;
-  final bool isAdmin;
-  final int cartCount;
-  final int orderCount;
-  final int wishlistCount;
+  final bool isUser;
 
   UserModel({
     required this.uid,
     required this.name,
     required this.email,
     required this.profileUrl,
-    required this.isAdmin,
-    required this.cartCount,
-    required this.orderCount,
-    required this.wishlistCount,
+    required this.isUser,
   });
 
   Map<String, dynamic> toMap() {
@@ -25,10 +19,7 @@ class UserModel {
       'name': name,
       'email': email,
       'profileUrl': profileUrl,
-      'isAdmin': isAdmin,
-      'cartCount': cartCount,
-      'orderCount': orderCount,
-      'wishlistCount': wishlistCount,
+      'isUser': isUser,
     };
   }
 
@@ -38,10 +29,7 @@ class UserModel {
       name: map['name'] as String,
       email: map['email'] as String,
       profileUrl: map['profileUrl'] as String,
-      isAdmin: map['isAdmin'] as bool,
-      cartCount: map['cartCount'] as int,
-      orderCount: map['orderCount'] as int,
-      wishlistCount: map['wishlistCount'] as int,
+      isUser: map['isUser'] as bool,
     );
   }
 }

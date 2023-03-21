@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emart/controllers/category_controller.dart';
 import 'package:emart/models/product_model.dart';
 import 'package:emart/services/firestore_services.dart';
+import 'package:emart/views/categories/sub_category_details_view.dart';
 import 'package:emart/views/common/custom_background.dart';
 import 'package:emart/views/product/product_details_view.dart';
 
@@ -25,39 +26,40 @@ class CategoryDetailsView extends StatelessWidget {
         ),
         body: Padding(
           padding: const EdgeInsets.all(12),
-          child: StreamBuilder<QuerySnapshot>(
-              stream: FirestoreServices.getCategoryProducts(category: title),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        physics: const BouncingScrollPhysics(),
-                        child: Row(
-                          children: List.generate(
-                            controller.subCategories.length,
-                            (index) {
-                              return controller.subCategories[index].text
-                                  .fontFamily(AppStyles.semiBold)
-                                  .color(AppColors.darkFontGrey)
-                                  .size(12)
-                                  .center
-                                  .makeCentered()
-                                  .box
-                                  .white
-                                  .roundedSM
-                                  .margin(const EdgeInsets.symmetric(horizontal: 4))
-                                  .size(120, 60)
-                                  .make();
-                            },
-                          ),
-                        ),
-                      ),
-                      10.heightBox,
-                      Expanded(
-                        child: GridView.builder(
+          child: Column(
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                child: Row(
+                  children: List.generate(
+                    controller.subCategories.length,
+                        (index) {
+                      return controller.subCategories[index].text
+                          .fontFamily(AppStyles.semiBold)
+                          .color(AppColors.darkFontGrey)
+                          .size(12)
+                          .center
+                          .makeCentered()
+                          .box
+                          .white
+                          .roundedSM
+                          .margin(const EdgeInsets.symmetric(horizontal: 4))
+                          .size(120, 60)
+                          .make().onInkTap(() {
+                            Get.to(()=> SubCategoryDetailsView(title: controller.subCategories[index]));
+                      });
+                    },
+                  ),
+                ),
+              ),
+              10.heightBox,
+              Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                    stream: FirestoreServices.getCategoryProducts(category: title),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return GridView.builder(
                           itemCount: snapshot.data!.docs.length,
                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
@@ -98,14 +100,14 @@ class CategoryDetailsView extends StatelessWidget {
                               },
                             );
                           },
-                        ),
-                      ),
-                    ],
-                  );
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              }),
+                        );
+                      } else {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                    }),
+              ),
+            ],
+          ),
         ),
       ),
     );
