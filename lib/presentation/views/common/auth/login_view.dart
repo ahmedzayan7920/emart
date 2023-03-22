@@ -3,8 +3,8 @@ import 'package:emart/views/common/custom_background.dart';
 import 'package:emart/views/common/custom_button.dart';
 import 'package:emart/views/common/custom_text_field.dart';
 
-import '../../consts/app_consts.dart';
-import '../../controllers/auth_controller.dart';
+import '../../../../consts/app_consts.dart';
+import '../../../../controllers/auth_controller.dart';
 import 'sign_up_view.dart';
 
 class LoginView extends StatefulWidget {

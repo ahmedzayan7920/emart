@@ -3,10 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emart/controllers/product_controller.dart';
 import 'package:emart/models/product_model.dart';
 import 'package:emart/services/firestore_services.dart';
-import 'package:emart/views/chat/messages_view.dart';
 import 'package:emart/views/product/shipping_info_view.dart';
 
 import '../../consts/app_consts.dart';
+import '../../presentation/views/common/chat/messages_view.dart';
 import '../common/custom_button.dart';
 
 class ProductDetailsView extends StatefulWidget {
@@ -37,10 +37,6 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
         title:
             widget.product.name.text.fontFamily(AppStyles.bold).color(AppColors.darkFontGrey).ellipsis.make(),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.share_outlined),
-          ),
           Obx(
             () => IconButton(
               onPressed: () {
@@ -81,17 +77,6 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                         .color(AppColors.darkFontGrey)
                         .fontFamily(AppStyles.semiBold)
                         .make(),
-                    10.heightBox,
-                    VxRating(
-                      isSelectable: false,
-                      onRatingUpdate: (value) {},
-                      count: 5,
-                      maxRating: 5,
-                      value: widget.product.rating.toDouble(),
-                      normalColor: AppColors.textFieldGrey,
-                      selectionColor: AppColors.golden,
-                      size: 25,
-                    ),
                     10.heightBox,
                     "\$${widget.product.price}"
                         .text
@@ -342,7 +327,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
             ),
             10.heightBox,
             CustomButton(
-              onPressed: () {
+              onPressed: widget.product.quantity < 1? null :() {
                 Get.to(() => const ShippingInfoView());
               },
               text: "Buy",

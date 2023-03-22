@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emart/models/message_model.dart';
-import 'package:emart/views/chat/messages_view.dart';
 import 'package:intl/intl.dart' as intl;
 
-import '../../consts/app_consts.dart';
-import '../../models/user_model.dart';
-import '../../services/firestore_services.dart';
+import '../../../../consts/app_consts.dart';
+import '../../../../models/user_model.dart';
+import '../../../../services/firestore_services.dart';
+import 'messages_view.dart';
 
 class ChatsView extends StatelessWidget {
   const ChatsView({Key? key}) : super(key: key);

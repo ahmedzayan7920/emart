@@ -1,7 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emart/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../consts/app_consts.dart';
+import '../presentation/views/common/auth/login_view.dart';
+import '../services/firestore_services.dart';
+import '../views/main/main_view.dart';
+import '../views/main/seller_main_view.dart';
 
 class AuthController extends GetxController {
   var isLoading = false.obs;
@@ -18,6 +23,12 @@ class AuthController extends GetxController {
       UserCredential userCredential =
           await AppFirebase.auth.signInWithEmailAndPassword(email: email, password: password);
       AppFirebase.currentUser = userCredential.user;
+      final DocumentSnapshot<Map<String, dynamic>> data = await FirestoreServices.getUserRole(id: AppFirebase.currentUser!.uid);
+      if (data.data()!["isUser"].toString() == "true"){
+        Get.offAll(() => const MainView());
+      }else{
+        Get.offAll(() => const SellerMainView());
+      }
     } on FirebaseAuthException catch (error) {
       isLoading(false);
       VxToast.show(context, msg: error.message ?? error.toString());
@@ -40,6 +51,11 @@ class AuthController extends GetxController {
       await userCredential.user?.reload();
       AppFirebase.currentUser = FirebaseAuth.instance.currentUser;
       await storeUserData();
+      if (isUser.value){
+        Get.offAll(() => const MainView());
+      }else{
+        Get.offAll(() => const SellerMainView());
+      }
     } on FirebaseAuthException catch (error) {
       isLoading(false);
       VxToast.show(context, msg: error.message ?? error.toString());
@@ -71,6 +87,7 @@ class AuthController extends GetxController {
   }) async {
     try {
       await AppFirebase.auth.signOut();
+      Get.offAll(()=>const LoginView());
     } on FirebaseAuthException catch (error) {
       VxToast.show(context, msg: error.message ?? error.toString());
     }

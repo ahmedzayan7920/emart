@@ -1,7 +1,8 @@
 import 'package:emart/models/message_model.dart';
 
-import '../../../consts/app_consts.dart';
 import 'package:intl/intl.dart' as intl;
+
+import '../../../../../consts/app_consts.dart';
 
 class CustomMessageItem extends StatelessWidget {
   const CustomMessageItem({Key? key, required this.message}) : super(key: key);
@@ -30,7 +31,12 @@ class CustomMessageItem extends StatelessWidget {
                 children: [
                   message.message.text.white.size(16).start.make(),
                   10.heightBox,
-                  (intl.DateFormat("hh:mm a").format(DateTime.fromMillisecondsSinceEpoch(message.time))).text.color(AppColors.whiteColor.withOpacity(0.5)).size(16).end.make(),
+                  (intl.DateFormat("hh:mm a").format(DateTime.fromMillisecondsSinceEpoch(message.time)))
+                      .text
+                      .color(AppColors.whiteColor.withOpacity(0.5))
+                      .size(16)
+                      .end
+                      .make(),
                 ],
               ),
             ),
@@ -52,9 +58,14 @@ class CustomMessageItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  message.message.text.white.size(16).end.make(),
+                  message.message.text.white.size(16).start.make(),
                   10.heightBox,
-                  (intl.DateFormat("hh:mm a").format(DateTime.fromMillisecondsSinceEpoch(message.time))).text.color(AppColors.whiteColor.withOpacity(0.5)).size(16).start.make(),
+                  (intl.DateFormat("hh:mm a").format(DateTime.fromMillisecondsSinceEpoch(message.time)))
+                      .text
+                      .color(AppColors.whiteColor.withOpacity(0.5))
+                      .size(16)
+                      .end
+                      .make(),
                 ],
               ),
             ),

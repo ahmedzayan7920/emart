@@ -46,11 +46,26 @@ class FirestoreServices {
         .snapshots();
   }
 
-  static getOrders() {
+  static getUserOrders() {
     return FirebaseFirestore.instance
         .collection(AppFirebase.ordersCollection)
         .where("userId", isEqualTo: AppFirebase.currentUser!.uid)
         .orderBy("time")
+        .snapshots();
+  }
+
+  static getSellerOrders() {
+    return FirebaseFirestore.instance
+        .collection(AppFirebase.ordersCollection)
+        .where("sellerId", isEqualTo: AppFirebase.currentUser!.uid)
+        .orderBy("time")
+        .snapshots();
+  }
+
+  static getSellerProducts() {
+    return FirebaseFirestore.instance
+        .collection(AppFirebase.productsCollection)
+        .where("sellerId", isEqualTo: AppFirebase.currentUser!.uid)
         .snapshots();
   }
 
@@ -94,5 +109,9 @@ class FirestoreServices {
 
   static getUserRole({required String id}) {
     return  FirebaseFirestore.instance.collection(AppFirebase.usersCollection).doc(id).get();
+  }
+
+  static getOrder({required String id}) {
+    return  FirebaseFirestore.instance.collection(AppFirebase.ordersCollection).doc(id).snapshots();
   }
 }

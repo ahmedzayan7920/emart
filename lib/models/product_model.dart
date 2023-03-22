@@ -6,13 +6,13 @@ class ProductModel {
   final String description;
   final num price;
   final num shippingPrice;
-  final num rating;
   final num quantity;
   final List<int> colors;
   final List<String> images;
   final List<String> wishlist;
   final String seller;
   final String sellerId;
+  final bool isFeatured;
 
   ProductModel({
     required this.id,
@@ -22,13 +22,13 @@ class ProductModel {
     required this.description,
     required this.price,
     required this.shippingPrice,
-    required this.rating,
     required this.quantity,
     required this.colors,
     required this.images,
     required this.wishlist,
     required this.seller,
     required this.sellerId,
+    required this.isFeatured,
   });
 
   Map<String, dynamic> toMap() {
@@ -40,13 +40,13 @@ class ProductModel {
       'description': description,
       'price': price,
       'shippingPrice': shippingPrice,
-      'rating': rating,
       'quantity': quantity,
       'colors': colors,
       'images': images,
       'wishlist': wishlist,
       'seller': seller,
       'sellerId': sellerId,
+      'isFeatured': isFeatured,
     };
   }
 
@@ -59,13 +59,13 @@ class ProductModel {
       description: map['description'] as String,
       price: map['price'] as num,
       shippingPrice: map['shippingPrice'] as num,
-      rating: map['rating'] as num,
       quantity: map['quantity'] as num,
       colors: (map['colors'] as List).map((e) => e as int).toList(),
       images: (map['images'] as List).map((dynamic e) => e as String).toList(),
       wishlist: (map['wishlist'] as List).map((e) => e as String).toList(),
       seller: map['seller'] as String,
       sellerId: map['sellerId'] as String,
+      isFeatured: map['isFeatured'] as bool,
     );
   }
 }

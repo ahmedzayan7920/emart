@@ -2,13 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emart/controllers/auth_controller.dart';
 import 'package:emart/models/user_model.dart';
-import 'package:emart/views/chat/chat_view.dart';
 import 'package:emart/views/common/custom_background.dart';
 import 'package:emart/views/orders/orders_view.dart';
-import 'package:emart/views/profile/edit_profile_view.dart';
+import 'package:emart/presentation/views/common/edit_profile_view.dart';
 import 'package:emart/views/profile/wishlist_view.dart';
 
 import '../../consts/app_consts.dart';
+import '../../presentation/views/common/chat/chat_view.dart';
 import '../../services/firestore_services.dart';
 
 class ProfileView extends StatelessWidget {
@@ -65,52 +65,6 @@ class ProfileView extends StatelessWidget {
                       ],
                     ),
                     15.heightBox,
-                    // Row(
-                    //   children: [
-                    //     Expanded(
-                    //       child: Column(
-                    //         children: [
-                    //           user.cartCount.text.make(),
-                    //           "In Cart".text.make(),
-                    //         ],
-                    //       )
-                    //           .box
-                    //           .white
-                    //           .roundedSM
-                    //           .padding(const EdgeInsets.all(12))
-                    //           .margin(const EdgeInsets.all(8))
-                    //           .make(),
-                    //     ),
-                    //     Expanded(
-                    //       child: Column(
-                    //         children: [
-                    //           user.orderCount.text.make(),
-                    //           "Orders".text.make(),
-                    //         ],
-                    //       )
-                    //           .box
-                    //           .white
-                    //           .roundedSM
-                    //           .padding(const EdgeInsets.all(12))
-                    //           .margin(const EdgeInsets.all(8))
-                    //           .make(),
-                    //     ),
-                    //     Expanded(
-                    //       child: Column(
-                    //         children: [
-                    //           user.wishlistCount.text.make(),
-                    //           "wishlist".text.make(),
-                    //         ],
-                    //       )
-                    //           .box
-                    //           .white
-                    //           .roundedSM
-                    //           .padding(const EdgeInsets.all(12))
-                    //           .margin(const EdgeInsets.all(8))
-                    //           .make(),
-                    //     ),
-                    //   ],
-                    // ),
                     Column(
                       children: [
                         ListTile(

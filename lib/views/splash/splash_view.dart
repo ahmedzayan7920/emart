@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emart/services/firestore_services.dart';
-import 'package:emart/views/auth/login_view.dart';
 import 'package:emart/views/common/custom_app_logo.dart';
 import 'package:emart/views/main/main_view.dart';
-import 'package:emart/views/seller/main/seller_main_view.dart';
+import 'package:emart/views/main/seller_main_view.dart';
 
 import '../../consts/app_consts.dart';
+import '../../presentation/views/common/auth/login_view.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({Key? key}) : super(key: key);
@@ -18,19 +18,17 @@ class _SplashViewState extends State<SplashView> {
   goNext() {
     Future.delayed(
       const Duration(seconds: 3),
-      () {
-        AppFirebase.auth.authStateChanges().listen((user) async{
-          if(user == null){
+      () async{
+          if(AppFirebase.currentUser == null){
             Get.off(()=>const LoginView());
           }else {
-           final DocumentSnapshot<Map<String, dynamic>> data = await FirestoreServices.getUserRole(id: user.uid);
+           final DocumentSnapshot<Map<String, dynamic>> data = await FirestoreServices.getUserRole(id: AppFirebase.currentUser!.uid);
             if (data.data()!["isUser"].toString() == "true"){
               Get.offAll(() => const MainView());
             }else{
               Get.offAll(() => const SellerMainView());
             }
           }
-        });
       },
     );
   }

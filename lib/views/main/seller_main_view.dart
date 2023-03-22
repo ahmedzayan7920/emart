@@ -1,5 +1,12 @@
-import '../../../consts/app_consts.dart';
-import '../../common/custom_exit_dialog.dart';
+import 'package:emart/controllers/category_controller.dart';
+import 'package:emart/presentation/views/seller/product/seller_add_product_view.dart';
+
+import '../../consts/app_consts.dart';
+import '../common/custom_exit_dialog.dart';
+import '../home/seller_home_view.dart';
+import '../../presentation/views/seller/order/seller_orders_view.dart';
+import '../../presentation/views/seller/product/seller_products_view.dart';
+import '../../presentation/views/seller/settings/seller_settings_view.dart';
 
 class SellerMainView extends StatefulWidget {
   const SellerMainView({Key? key}) : super(key: key);
@@ -11,16 +18,14 @@ class SellerMainView extends StatefulWidget {
 class _SellerMainViewState extends State<SellerMainView> {
   var currentIndex = 0;
 
-
   @override
   Widget build(BuildContext context) {
-
-    // var bodyItems = [
-    //   const HomeView(),
-    //   const CategoriesView(),
-    //   const ProfileView(),
-    // ];
-
+    var bodyItems = [
+      const SellerHomeView(),
+      const SellerProductsView(),
+      const SellerOrdersView(),
+      const SellerSettingsView(),
+    ];
 
     var navItems = [
       BottomNavigationBarItem(
@@ -66,20 +71,26 @@ class _SellerMainViewState extends State<SellerMainView> {
         return false;
       },
       child: Scaffold(
-        // body: Obx(
-        //       () => bodyItems[controller.currentIndex.value],
-        // ),
+        body: bodyItems[currentIndex],
+        floatingActionButton: currentIndex == 1
+            ? FloatingActionButton(
+                onPressed: () {
+                  Get.to(()=> const SellerAddProductView());
+                },
+                child: const Icon(Icons.add, color: Colors.white),
+              )
+            : null,
         bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            items: navItems,
-            selectedItemColor: AppColors.redColor,
-            currentIndex: currentIndex,
-            onTap: (value) {
-              setState(() {
-                currentIndex = value;
-              });
-            },
-          ),
+          type: BottomNavigationBarType.fixed,
+          items: navItems,
+          selectedItemColor: AppColors.redColor,
+          currentIndex: currentIndex,
+          onTap: (value) {
+            setState(() {
+              currentIndex = value;
+            });
+          },
+        ),
       ),
     );
   }

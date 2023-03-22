@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emart/consts/app_consts.dart';
 import 'package:emart/models/address_model.dart';
@@ -114,14 +115,17 @@ class ProductController extends GetxController {
       address: addressModel,
     );
 
-    await ref.set(orderModel.toMap()).then((value) {
-      Get.back();
-      Get.back();
-      Get.back();
-      Get.back();
-      Get.to(() => const OrdersView());
+    await ref.set(orderModel.toMap());
+    await AppFirebase.firestore.collection(AppFirebase.productsCollection).doc(product.id).update({
+      "quantity": FieldValue.increment((quantity.value * -1))
     });
-
     isPlacingOrder(false);
+    Get.back();
+    Get.back();
+    Get.back();
+    Get.back();
+    Get.to(() => const OrdersView());
   }
+
+
 }

@@ -2,9 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emart/controllers/chat_controller.dart';
 import 'package:emart/models/message_model.dart';
 import 'package:emart/services/firestore_services.dart';
-import 'package:emart/views/chat/widgets/custom_message_item.dart';
 
-import '../../consts/app_consts.dart';
+import '../../../../consts/app_consts.dart';
+import 'widgets/custom_message_item.dart';
+
 
 class MessagesView extends StatefulWidget {
   const MessagesView({

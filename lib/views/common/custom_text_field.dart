@@ -7,12 +7,16 @@ class CustomTextField extends StatelessWidget {
     required this.hint,
     required this.controller,
     this.isPassword = false,
+    this.maxLines = 1,
+    this.keyboardType = TextInputType.text,
   }) : super(key: key);
 
   final String title;
   final String hint;
   final TextEditingController controller;
   final bool isPassword;
+  final int maxLines;
+  final TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +32,12 @@ class CustomTextField extends StatelessWidget {
             }
             return null;
           },
+          keyboardType: keyboardType,
+          maxLines: maxLines,
           controller: controller,
           obscureText: isPassword,
           decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+            contentPadding:  EdgeInsets.symmetric(vertical: maxLines == 1 ?0: 8, horizontal: 16),
             hintText: hint,
             // isDense: true,
             fillColor: AppColors.lightGrey,

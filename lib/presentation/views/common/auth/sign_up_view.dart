@@ -5,7 +5,7 @@ import 'package:emart/views/common/custom_button.dart';
 import 'package:emart/views/common/custom_text_field.dart';
 import 'package:flutter/gestures.dart';
 
-import '../../consts/app_consts.dart';
+import '../../../../consts/app_consts.dart';
 import 'login_view.dart';
 
 class SignUpView extends StatefulWidget {

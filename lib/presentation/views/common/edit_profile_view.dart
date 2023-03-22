@@ -6,8 +6,8 @@ import 'package:emart/views/common/custom_background.dart';
 import 'package:emart/views/common/custom_button.dart';
 import 'package:emart/views/common/custom_text_field.dart';
 
-import '../../consts/app_consts.dart';
-import '../../models/user_model.dart';
+import '../../../consts/app_consts.dart';
+import '../../../models/user_model.dart';
 
 class EditProfileView extends StatefulWidget {
   const EditProfileView({Key? key, required this.userModel}) : super(key: key);

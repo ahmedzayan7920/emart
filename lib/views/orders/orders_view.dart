@@ -19,7 +19,7 @@ class OrdersView extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: StreamBuilder<QuerySnapshot>(
-            stream: FirestoreServices.getOrders(),
+            stream: FirestoreServices.getUserOrders(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 List<OrderModel> orders = List.from(
