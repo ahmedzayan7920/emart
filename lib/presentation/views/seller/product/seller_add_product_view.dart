@@ -1,7 +1,8 @@
-import 'package:emart/views/common/custom_text_field.dart';
+import 'package:emart/presentation/widgets/custom_button.dart';
 
 import '../../../../consts/app_consts.dart';
 import '../../../../controllers/seller_product_controller.dart';
+import '../../../widgets/custom_text_field.dart';
 
 class SellerAddProductView extends StatefulWidget {
   const SellerAddProductView({Key? key}) : super(key: key);
@@ -11,8 +12,8 @@ class SellerAddProductView extends StatefulWidget {
 }
 
 class _SellerAddProductViewState extends State<SellerAddProductView> {
-
   var controller = Get.put(SellerProductController());
+
   @override
   void dispose() {
     controller.nameController.clear();
@@ -27,6 +28,7 @@ class _SellerAddProductViewState extends State<SellerAddProductView> {
     controller.selectedColors.value = [0];
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -35,14 +37,6 @@ class _SellerAddProductViewState extends State<SellerAddProductView> {
           backgroundColor: Colors.white,
           appBar: AppBar(
             title: "Add Product".text.color(AppColors.darkFontGrey).fontFamily(AppStyles.semiBold).make(),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  controller.uploadProduct(context: context);
-                },
-                child: "Add".text.make(),
-              ),
-            ],
           ),
           body: Padding(
             padding: const EdgeInsets.all(16),
@@ -72,18 +66,21 @@ class _SellerAddProductViewState extends State<SellerAddProductView> {
                           title: "Price",
                           hint: "eg. \$100",
                           controller: controller.priceController,
+                          keyboardType:  TextInputType.number,
                         ),
                         10.heightBox,
                         CustomTextField(
                           title: "Shipping Price",
                           hint: "eg. \$7",
                           controller: controller.shippingPriceController,
+                          keyboardType:  TextInputType.number,
                         ),
                         10.heightBox,
                         CustomTextField(
                           title: "Quantity",
                           hint: "eg. 25",
                           controller: controller.quantityController,
+                          keyboardType:  TextInputType.number,
                         ),
                       ],
                     ),
@@ -188,6 +185,14 @@ class _SellerAddProductViewState extends State<SellerAddProductView> {
                         }),
                       ),
                     ),
+                  ),
+                  10.heightBox,
+                  CustomButton(
+                    onPressed: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      controller.uploadProduct(context: context);
+                    },
+                    text: "Add",
                   ),
                 ],
               ),

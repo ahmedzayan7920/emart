@@ -1,8 +1,8 @@
-import 'package:emart/views/splash/splash_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 
 import 'consts/app_consts.dart';
+import 'presentation/views/common/splash/splash_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

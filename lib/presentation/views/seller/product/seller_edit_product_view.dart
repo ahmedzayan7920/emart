@@ -1,14 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emart/models/product_model.dart';
-import 'package:emart/views/common/custom_text_field.dart';
 
 import '../../../../consts/app_consts.dart';
 import '../../../../controllers/seller_product_controller.dart';
+import '../../../widgets/custom_button.dart';
+import '../../../widgets/custom_text_field.dart';
 
 class SellerEditProductView extends StatefulWidget {
-  const SellerEditProductView({Key? key, this.product}) : super(key: key);
+  const SellerEditProductView({Key? key, required this.product}) : super(key: key);
 
-  final ProductModel? product;
+  final ProductModel product;
 
   @override
   State<SellerEditProductView> createState() => _SellerEditProductViewState();
@@ -19,8 +20,8 @@ class _SellerEditProductViewState extends State<SellerEditProductView> {
 
   getSelectedImages(){
     var images = <String?>[null, null, null];
-    for(var i = 0 ; i < widget.product!.images.length ; i++){
-      images[i] = widget.product!.images[i];
+    for(var i = 0 ; i < widget.product.images.length ; i++){
+      images[i] = widget.product.images[i];
     }
     return images;
   }
@@ -28,7 +29,7 @@ class _SellerEditProductViewState extends State<SellerEditProductView> {
   getSelectedColors() {
     var colors = <int>[];
     for (var i = 0; i < Colors.primaries.length; i++) {
-      if (widget.product!.colors.contains(Colors.primaries[i].value)) {
+      if (widget.product.colors.contains(Colors.primaries[i].value)) {
         colors.add(i);
       }
     }
@@ -37,18 +38,16 @@ class _SellerEditProductViewState extends State<SellerEditProductView> {
 
   @override
   void initState() {
-    if (widget.product != null) {
-      controller.getSubCategories(category: widget.product!.category);
-      controller.nameController.text = widget.product!.name;
-      controller.descriptionController.text = widget.product!.description;
-      controller.priceController.text = widget.product!.price.toString();
-      controller.shippingPriceController.text = widget.product!.shippingPrice.toString();
-      controller.quantityController.text = widget.product!.quantity.toString();
-      controller.categoryValue.value = widget.product!.category;
-      controller.subCategoryValue.value = widget.product!.subCategory;
+      controller.getSubCategories(category: widget.product.category);
+      controller.nameController.text = widget.product.name;
+      controller.descriptionController.text = widget.product.description;
+      controller.priceController.text = widget.product.price.toString();
+      controller.shippingPriceController.text = widget.product.shippingPrice.toString();
+      controller.quantityController.text = widget.product.quantity.toString();
+      controller.categoryValue.value = widget.product.category;
+      controller.subCategoryValue.value = widget.product.subCategory;
       controller.imagesUrl = getSelectedImages();
       controller.selectedColors.value = getSelectedColors();
-    }
     super.initState();
   }
 
@@ -75,14 +74,6 @@ class _SellerEditProductViewState extends State<SellerEditProductView> {
           backgroundColor: Colors.white,
           appBar: AppBar(
             title: "Edit Product".text.color(AppColors.darkFontGrey).fontFamily(AppStyles.semiBold).make(),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  controller.updateProduct(context: context, product: widget.product!);
-                },
-                child: "Save".text.make(),
-              ),
-            ],
           ),
           body: Padding(
             padding: const EdgeInsets.all(16),
@@ -112,18 +103,21 @@ class _SellerEditProductViewState extends State<SellerEditProductView> {
                           title: "Price",
                           hint: "eg. \$100",
                           controller: controller.priceController,
+                          keyboardType:  TextInputType.number,
                         ),
                         10.heightBox,
                         CustomTextField(
                           title: "Shipping Price",
                           hint: "eg. \$7",
                           controller: controller.shippingPriceController,
+                          keyboardType:  TextInputType.number,
                         ),
                         10.heightBox,
                         CustomTextField(
                           title: "Quantity",
                           hint: "eg. 25",
                           controller: controller.quantityController,
+                          keyboardType:  TextInputType.number,
                         ),
                       ],
                     ),
@@ -235,6 +229,14 @@ class _SellerEditProductViewState extends State<SellerEditProductView> {
                         }),
                       ),
                     ),
+                  ),
+                  10.heightBox,
+                  CustomButton(
+                    onPressed: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      controller.updateProduct(context: context, product: widget.product);
+                    },
+                    text: "Save",
                   ),
                 ],
               ),

@@ -6,7 +6,6 @@ import 'package:emart/services/firestore_services.dart';
 import '../../../../consts/app_consts.dart';
 import 'widgets/custom_message_item.dart';
 
-
 class MessagesView extends StatefulWidget {
   const MessagesView({
     Key? key,
@@ -23,6 +22,7 @@ class MessagesView extends StatefulWidget {
 
 class _MessagesViewState extends State<MessagesView> {
   final messageController = TextEditingController();
+  final scrollController = ScrollController();
 
   var controller = Get.put(ChatController());
 
@@ -48,6 +48,10 @@ class _MessagesViewState extends State<MessagesView> {
                         ),
                       );
                       return ListView.builder(
+                        controller: scrollController,
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        // reverse: true,
                         itemCount: messages.length,
                         itemBuilder: (context, index) {
                           return CustomMessageItem(message: messages[index]);
@@ -63,6 +67,23 @@ class _MessagesViewState extends State<MessagesView> {
               children: [
                 Expanded(
                   child: TextFormField(
+                    onFieldSubmitted: (value) {
+                      if (messageController.text.isNotEmpty) {
+                        MessageModel message = MessageModel(
+                          message: messageController.text,
+                          senderId: AppFirebase.currentUser!.uid,
+                          receiverId: widget.sellerId,
+                          time: DateTime.now().millisecondsSinceEpoch,
+                        );
+                        controller.sendMessage(message: message, context: context);
+                        messageController.clear();
+                        scrollController.animateTo(
+                          scrollController.position.maxScrollExtent,
+                          curve: Curves.bounceInOut,
+                          duration: Duration.zero,
+                        );
+                      }
+                    },
                     controller: messageController,
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.all(12),
@@ -73,14 +94,21 @@ class _MessagesViewState extends State<MessagesView> {
                 ),
                 IconButton(
                   onPressed: () {
-                    MessageModel message = MessageModel(
-                      message: messageController.text,
-                      senderId: AppFirebase.currentUser!.uid,
-                      receiverId: widget.sellerId,
-                      time: DateTime.now().millisecondsSinceEpoch,
-                    );
-                    controller.sendMessage(message: message);
-                    messageController.clear();
+                    if (messageController.text.isNotEmpty) {
+                      MessageModel message = MessageModel(
+                        message: messageController.text,
+                        senderId: AppFirebase.currentUser!.uid,
+                        receiverId: widget.sellerId,
+                        time: DateTime.now().millisecondsSinceEpoch,
+                      );
+                      controller.sendMessage(message: message, context: context);
+                      messageController.clear();
+                      scrollController.animateTo(
+                        scrollController.position.maxScrollExtent,
+                        curve: Curves.bounceInOut,
+                        duration: Duration.zero,
+                      );
+                    }
                   },
                   icon: const Icon(Icons.send_outlined),
                   color: AppColors.redColor,

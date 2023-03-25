@@ -1,24 +1,21 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emart/consts/app_consts.dart';
-import 'package:emart/models/address_model.dart';
-import 'package:emart/models/order_model.dart';
-import 'package:emart/views/orders/orders_view.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:path/path.dart';
 
 import '../models/category_model.dart';
 import '../models/product_model.dart';
-import '../services/firestore_services.dart';
 
 class SellerProductController extends GetxController {
   /// Products View
   final menuController = VxPopupMenuController();
-
 
   changeFeaturedStatus({required String id, required bool isFeatured}) async {
     await AppFirebase.firestore.collection(AppFirebase.productsCollection).doc(id).update({
@@ -26,10 +23,14 @@ class SellerProductController extends GetxController {
     });
   }
 
-  deleteProduct({required ProductModel product}) async {
-    await AppFirebase.firestore.collection(AppFirebase.productsCollection).doc(product.id).delete();
-    for (var url in product.images) {
-      FirebaseStorage.instance.refFromURL(url).delete();
+  deleteProduct({required ProductModel product, required BuildContext context}) async {
+    if (await InternetConnectionChecker().hasConnection) {
+      await AppFirebase.firestore.collection(AppFirebase.productsCollection).doc(product.id).delete();
+      for (var url in product.images) {
+        FirebaseStorage.instance.refFromURL(url).delete();
+      }
+    } else {
+      VxToast.show(context, msg: "No Internet Connection");
     }
   }
 
@@ -103,33 +104,37 @@ class SellerProductController extends GetxController {
       if (categoryValue.isNotEmpty && subCategoryValue.isNotEmpty) {
         if (images.count((element) => element != null) > 0) {
           if (selectedColors.isNotEmpty) {
-            await uploadImages();
-            List<String> images = [];
-            for (var e in imagesUrl) {
-              if (e != null) {
-                images.add(e);
+            if (await InternetConnectionChecker().hasConnection) {
+              await uploadImages();
+              List<String> images = [];
+              for (var e in imagesUrl) {
+                if (e != null) {
+                  images.add(e);
+                }
               }
+              final colors = selectedColors.map((element) => Colors.primaries[element].value).toList();
+              final ref = AppFirebase.firestore.collection(AppFirebase.productsCollection).doc();
+              ProductModel productModel = ProductModel(
+                id: ref.id,
+                name: nameController.text,
+                category: categoryValue.value,
+                subCategory: subCategoryValue.value,
+                description: descriptionController.text,
+                price: num.parse(priceController.text),
+                shippingPrice: num.parse(shippingPriceController.text),
+                quantity: num.parse(quantityController.text),
+                colors: colors,
+                images: images,
+                wishlist: [],
+                seller: AppFirebase.currentUser!.displayName!,
+                sellerId: AppFirebase.currentUser!.uid,
+                isFeatured: false,
+              );
+              await ref.set(productModel.toMap());
+              Get.back();
+            } else {
+              VxToast.show(context, msg: "No Internet Connection");
             }
-            final colors = selectedColors.map((element) => Colors.primaries[element].value).toList();
-            final ref = AppFirebase.firestore.collection(AppFirebase.productsCollection).doc();
-            ProductModel productModel = ProductModel(
-              id: ref.id,
-              name: nameController.text,
-              category: categoryValue.value,
-              subCategory: subCategoryValue.value,
-              description: descriptionController.text,
-              price: num.parse(priceController.text),
-              shippingPrice: num.parse(shippingPriceController.text),
-              quantity: num.parse(quantityController.text),
-              colors: colors,
-              images: images,
-              wishlist: [],
-              seller: AppFirebase.currentUser!.displayName!,
-              sellerId: AppFirebase.currentUser!.uid,
-              isFeatured: false,
-            );
-            await ref.set(productModel.toMap());
-            Get.back();
           } else {
             VxToast.show(context, msg: "Select 1 Color at least for the Product");
           }
@@ -150,59 +155,71 @@ class SellerProductController extends GetxController {
       formKey.currentState!.save();
       if (categoryValue.isNotEmpty && subCategoryValue.isNotEmpty) {
         if (selectedColors.isNotEmpty) {
-          if (images.count((element) => element != null) > 0) {
-            await uploadImages();
-            List<String> images = [];
-            for (var e in imagesUrl) {
-              if (e != null) {
-                images.add(e);
+          if (await InternetConnectionChecker().hasConnection) {
+            if (images.count((element) => element != null) > 0) {
+              await uploadImages();
+              List<String> images = [];
+              for (var e in imagesUrl) {
+                if (e != null) {
+                  images.add(e);
+                }
               }
+              final colors = selectedColors.map((element) => Colors.primaries[element].value).toList();
+              ProductModel productModel = ProductModel(
+                id: product.id,
+                name: nameController.text,
+                category: categoryValue.value,
+                subCategory: subCategoryValue.value,
+                description: descriptionController.text,
+                price: num.parse(priceController.text),
+                shippingPrice: num.parse(shippingPriceController.text),
+                quantity: num.parse(quantityController.text),
+                colors: colors,
+                images: images,
+                wishlist: product.wishlist,
+                seller: AppFirebase.currentUser!.displayName!,
+                sellerId: AppFirebase.currentUser!.uid,
+                isFeatured: product.isFeatured,
+              );
+              await AppFirebase.firestore
+                  .collection(AppFirebase.productsCollection)
+                  .doc(product.id)
+                  .update(productModel.toMap());
+              imagesUrl = [null, null, null];
+              Get.back();
+            } else {
+              List<String> images = [];
+              for (var e in imagesUrl) {
+                if (e != null) {
+                  images.add(e);
+                }
+              }
+              final colors = selectedColors.map((element) => Colors.primaries[element].value).toList();
+              ProductModel productModel = ProductModel(
+                id: product.id,
+                name: nameController.text,
+                category: categoryValue.value,
+                subCategory: subCategoryValue.value,
+                description: descriptionController.text,
+                price: num.parse(priceController.text),
+                shippingPrice: num.parse(shippingPriceController.text),
+                quantity: num.parse(quantityController.text),
+                colors: colors,
+                images: images,
+                wishlist: product.wishlist,
+                seller: AppFirebase.currentUser!.displayName!,
+                sellerId: AppFirebase.currentUser!.uid,
+                isFeatured: product.isFeatured,
+              );
+              await AppFirebase.firestore
+                  .collection(AppFirebase.productsCollection)
+                  .doc(product.id)
+                  .update(productModel.toMap());
+              imagesUrl = [null, null, null];
+              Get.back();
             }
-            final colors = selectedColors.map((element) => Colors.primaries[element].value).toList();
-            ProductModel productModel = ProductModel(
-              id: product.id,
-              name: nameController.text,
-              category: categoryValue.value,
-              subCategory: subCategoryValue.value,
-              description: descriptionController.text,
-              price: num.parse(priceController.text),
-              shippingPrice: num.parse(shippingPriceController.text),
-              quantity: num.parse(quantityController.text),
-              colors: colors,
-              images: images,
-              wishlist: product.wishlist,
-              seller: AppFirebase.currentUser!.displayName!,
-              sellerId: AppFirebase.currentUser!.uid,
-              isFeatured: product.isFeatured,
-            );
-            await AppFirebase.firestore.collection(AppFirebase.productsCollection).doc(product.id).update(productModel.toMap());
-            Get.back();
           } else {
-            List<String> images = [];
-            for (var e in imagesUrl) {
-              if (e != null) {
-                images.add(e);
-              }
-            }
-            final colors = selectedColors.map((element) => Colors.primaries[element].value).toList();
-            ProductModel productModel = ProductModel(
-              id: product.id,
-              name: nameController.text,
-              category: categoryValue.value,
-              subCategory: subCategoryValue.value,
-              description: descriptionController.text,
-              price: num.parse(priceController.text),
-              shippingPrice: num.parse(shippingPriceController.text),
-              quantity: num.parse(quantityController.text),
-              colors: colors,
-              images: images,
-              wishlist: product.wishlist,
-              seller: AppFirebase.currentUser!.displayName!,
-              sellerId: AppFirebase.currentUser!.uid,
-              isFeatured: product.isFeatured,
-            );
-            await AppFirebase.firestore.collection(AppFirebase.productsCollection).doc(product.id).update(productModel.toMap());
-            Get.back();
+            VxToast.show(context, msg: "No Internet Connection");
           }
         } else {
           VxToast.show(context, msg: "Select 1 Color at least for the Product");
@@ -212,7 +229,6 @@ class SellerProductController extends GetxController {
       }
     }
     isUploading(false);
-    imagesUrl = [null, null, null];
   }
 
   @override

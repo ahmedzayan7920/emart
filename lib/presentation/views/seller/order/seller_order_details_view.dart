@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emart/controllers/seller_orders_controller.dart';
 import 'package:emart/models/order_model.dart';
-import 'package:emart/views/common/custom_button.dart';
-import 'package:emart/views/orders/widgets/custom_order_status.dart';
+import 'package:emart/presentation/widgets/custom_button.dart';
 
 import '../../../../consts/app_consts.dart';
 import 'package:intl/intl.dart' as intl;
 
 import '../../../../services/firestore_services.dart';
-import '../../../../views/orders/widgets/custom_details_row.dart';
+import '../../../widgets/custom_details_row.dart';
+import '../../../widgets/custom_order_status.dart';
 
 class SellerOrderDetailsView extends StatelessWidget {
   const SellerOrderDetailsView({Key? key, required this.id}) : super(key: key);
@@ -152,10 +152,14 @@ class SellerOrderDetailsView extends StatelessWidget {
                       ? const SizedBox.shrink()
                       : Obx(
                           () => controller.isLoading.value
-                              ? const Center(child: CircularProgressIndicator())
+                              ? const Padding(
+                                padding: EdgeInsets.only(bottom: 16),
+                                child: Center(child: CircularProgressIndicator()),
+                              )
                               : CustomButton(
                                   onPressed: () {
                                     controller.changeOrderStatus(
+                                      context: context,
                                       id: order.id,
                                       status: !(order.isConfirmed)
                                           ? "isConfirmed"

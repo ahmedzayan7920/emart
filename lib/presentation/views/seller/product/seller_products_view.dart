@@ -116,7 +116,7 @@ class SellerProductsView extends StatelessWidget {
                                             "Delete".text.color(AppColors.darkFontGrey).make(),
                                           ],
                                         ).onInkTap(() {
-                                          controller.deleteProduct(product: products[index]);
+                                          controller.deleteProduct(context: context,product: products[index]);
                                           controller.menuController.hideMenu();
                                         }),
                                       ],

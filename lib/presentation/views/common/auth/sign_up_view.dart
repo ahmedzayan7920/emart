@@ -1,11 +1,13 @@
 import 'package:emart/controllers/auth_controller.dart';
-import 'package:emart/views/common/custom_app_logo.dart';
-import 'package:emart/views/common/custom_background.dart';
-import 'package:emart/views/common/custom_button.dart';
-import 'package:emart/views/common/custom_text_field.dart';
+import 'package:emart/presentation/widgets/custom_app_logo.dart';
+import 'package:emart/presentation/widgets/custom_button.dart';
 import 'package:flutter/gestures.dart';
 
 import '../../../../consts/app_consts.dart';
+import '../../../widgets/custom_background.dart';
+import '../../../widgets/custom_privacy_policy_dialog.dart';
+import '../../../widgets/custom_terms_and_conditions_dialog.dart';
+import '../../../widgets/custom_text_field.dart';
 import 'login_view.dart';
 
 class SignUpView extends StatefulWidget {
@@ -28,6 +30,7 @@ class _SignUpViewState extends State<SignUpView> {
   signUp() {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
+      FocusManager.instance.primaryFocus?.unfocus();
       controller.signUp(
         name: nameController.text,
         email: emailController.text,
@@ -70,6 +73,7 @@ class _SignUpViewState extends State<SignUpView> {
                             title: AppStrings.name,
                             hint: AppStrings.nameHint,
                             controller: nameController,
+                            keyboardType: TextInputType.emailAddress,
                           ),
                           10.heightBox,
                           CustomTextField(
@@ -117,49 +121,74 @@ class _SignUpViewState extends State<SignUpView> {
                         ],
                       ),
                     ),
-                    Obx(
-                      () => CheckboxListTile(
-                        controlAffinity: ListTileControlAffinity.leading,
-                        activeColor: AppColors.redColor,
-                        value: controller.isTermsAgreed.value,
-                        onChanged: (value) {
-                          controller.isTermsAgreed(value ?? false);
-                        },
-                        title: RichText(
-                          text: const TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "I agree to the ",
-                                style: TextStyle(
-                                  fontFamily: AppStyles.regular,
-                                  color: AppColors.fontGrey,
-                                ),
-                              ),
-                              TextSpan(
-                                text: AppStrings.termsAndConditions,
-                                style: TextStyle(
-                                  fontFamily: AppStyles.regular,
-                                  color: AppColors.redColor,
-                                ),
-                              ),
-                              TextSpan(
-                                text: " & ",
-                                style: TextStyle(
-                                  fontFamily: AppStyles.regular,
-                                  color: AppColors.fontGrey,
-                                ),
-                              ),
-                              TextSpan(
-                                text: AppStrings.privacyPolicy,
-                                style: TextStyle(
-                                  fontFamily: AppStyles.regular,
-                                  color: AppColors.redColor,
-                                ),
-                              ),
-                            ],
+                    Row(
+                      children: [
+                        Obx(
+                          () => Checkbox(
+                            value: controller.isTermsAgreed.value,
+                            onChanged: (value) {
+                              controller.isTermsAgreed(value ?? false);
+                            },
                           ),
                         ),
-                      ),
+                        18.widthBox,
+                        Expanded(
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                const TextSpan(
+                                  text: "I agree to the ",
+                                  style: TextStyle(
+                                    fontFamily: AppStyles.regular,
+                                    color: AppColors.fontGrey,
+                                  ),
+                                ),
+                                TextSpan(
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (context) => const CustomTermsAndConditionsDialog(),
+                                      );
+                                    },
+                                  text: AppStrings.termsAndConditions,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: AppStyles.semiBold,
+                                    color: AppColors.redColor,
+                                    height: 1.5,
+                                  ),
+                                ),
+                                const TextSpan(
+                                  text: " & ",
+                                  style: TextStyle(
+                                    fontFamily: AppStyles.regular,
+                                    color: AppColors.fontGrey,
+                                  ),
+                                ),
+                                 TextSpan(
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (context) => const CustomPrivacyPolicyDialog(),
+                                      );
+                                    },
+                                  text: AppStrings.privacyPolicy,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: AppStyles.semiBold,
+                                    color: AppColors.redColor,
+                                    height: 1.5,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     Obx(
                       () => controller.isLoading.value

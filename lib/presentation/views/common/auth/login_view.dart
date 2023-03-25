@@ -1,10 +1,11 @@
-import 'package:emart/views/common/custom_app_logo.dart';
-import 'package:emart/views/common/custom_background.dart';
-import 'package:emart/views/common/custom_button.dart';
-import 'package:emart/views/common/custom_text_field.dart';
+import 'package:emart/presentation/views/common/auth/forget_password_view.dart';
+import 'package:emart/presentation/widgets/custom_app_logo.dart';
+import 'package:emart/presentation/widgets/custom_button.dart';
 
 import '../../../../consts/app_consts.dart';
 import '../../../../controllers/auth_controller.dart';
+import '../../../widgets/custom_background.dart';
+import '../../../widgets/custom_text_field.dart';
 import 'sign_up_view.dart';
 
 class LoginView extends StatefulWidget {
@@ -23,8 +24,10 @@ class _LoginViewState extends State<LoginView> {
   final formKey = GlobalKey<FormState>();
 
   login() {
+
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
+      FocusManager.instance.primaryFocus?.unfocus();
       controller.login(
         email: emailController.text,
         password: passwordController.text,
@@ -65,6 +68,7 @@ class _LoginViewState extends State<LoginView> {
                             title: AppStrings.email,
                             hint: AppStrings.emailHint,
                             controller: emailController,
+                            keyboardType: TextInputType.emailAddress,
                           ),
                           10.heightBox,
                           CustomTextField(
@@ -79,7 +83,9 @@ class _LoginViewState extends State<LoginView> {
                     Align(
                       alignment: AlignmentDirectional.centerEnd,
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.to(()=> const ForgetPasswordView());
+                        },
                         child: AppStrings.forgetPassword.text.fontFamily(AppStyles.semiBold).make(),
                       ),
                     ),
