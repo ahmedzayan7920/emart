@@ -62,13 +62,13 @@ class SellerProductDetailsView extends StatelessWidget {
               10.heightBox,
               Row(
                 children: [
-                  "\$${product.price}"
+                  "EGP ${product.price}"
                       .text
                       .color(AppColors.redColor)
                       .size(18)
                       .fontFamily(AppStyles.bold)
                       .make(),
-                  "  +  \$${product.shippingPrice}"
+                  "  +  EGP ${product.shippingPrice}"
                       .text
                       .color(AppColors.redColor)
                       .size(18)

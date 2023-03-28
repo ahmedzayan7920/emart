@@ -63,7 +63,7 @@ class SellerOrdersView extends StatelessWidget {
                                           .color(AppColors.darkFontGrey)
                                           .make(),
                                       const Spacer(),
-                                      "\$${orders[index].totalPrice}"
+                                      "EGP ${orders[index].totalPrice}"
                                           .text
                                           .size(16)
                                           .color(AppColors.redColor)

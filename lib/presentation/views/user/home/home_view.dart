@@ -130,7 +130,7 @@ class _HomeViewState extends State<HomeView> {
                                                     .fontFamily(AppStyles.semiBold)
                                                     .make(),
                                                 10.heightBox,
-                                                "\$${products[index].price}"
+                                                "EGP ${products[index].price}"
                                                     .text
                                                     .color(AppColors.redColor)
                                                     .fontFamily(AppStyles.bold)
@@ -207,7 +207,7 @@ class _HomeViewState extends State<HomeView> {
                                         .ellipsis
                                         .make(),
                                     10.heightBox,
-                                    "\$${products[index].price}"
+                                    "EGP ${products[index].price}"
                                         .text
                                         .color(AppColors.redColor)
                                         .fontFamily(AppStyles.bold)

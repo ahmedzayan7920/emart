@@ -131,6 +131,7 @@ class SellerProductController extends GetxController {
                 isFeatured: false,
               );
               await ref.set(productModel.toMap());
+              imagesUrl = [null, null, null];
               Get.back();
             } else {
               VxToast.show(context, msg: "No Internet Connection");
@@ -146,7 +147,6 @@ class SellerProductController extends GetxController {
       }
     }
     isUploading(false);
-    imagesUrl = [null, null, null];
   }
 
   updateProduct({required BuildContext context, required ProductModel product}) async {

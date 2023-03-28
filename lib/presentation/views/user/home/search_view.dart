@@ -59,7 +59,7 @@ class SearchView extends StatelessWidget {
                             .ellipsis
                             .make(),
                         10.heightBox,
-                        "\$${products[index].price}"
+                        "EGP ${products[index].price}"
                             .text
                             .color(AppColors.redColor)
                             .fontFamily(AppStyles.bold)

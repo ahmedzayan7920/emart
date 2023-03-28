@@ -62,7 +62,7 @@ class SellerProductsView extends StatelessWidget {
                                       10.heightBox,
                                       Row(
                                         children: [
-                                          "\$${products[index].price}"
+                                          "EGP ${products[index].price}"
                                               .text
                                               .size(16)
                                               .fontFamily(AppStyles.semiBold)

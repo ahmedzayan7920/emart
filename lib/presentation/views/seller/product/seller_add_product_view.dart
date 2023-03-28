@@ -64,14 +64,14 @@ class _SellerAddProductViewState extends State<SellerAddProductView> {
                         10.heightBox,
                         CustomTextField(
                           title: "Price",
-                          hint: "eg. \$100",
+                          hint: "eg. EGP 100",
                           controller: controller.priceController,
                           keyboardType:  TextInputType.number,
                         ),
                         10.heightBox,
                         CustomTextField(
                           title: "Shipping Price",
-                          hint: "eg. \$7",
+                          hint: "eg. EGP 7",
                           controller: controller.shippingPriceController,
                           keyboardType:  TextInputType.number,
                         ),

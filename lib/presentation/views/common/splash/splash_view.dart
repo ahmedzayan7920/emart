@@ -18,17 +18,18 @@ class _SplashViewState extends State<SplashView> {
   goNext() {
     Future.delayed(
       const Duration(seconds: 3),
-      () async{
-          if(AppFirebase.currentUser == null){
-            Get.off(()=>const LoginView());
-          }else {
-           final DocumentSnapshot<Map<String, dynamic>> data = await FirestoreServices.getUserRole(id: AppFirebase.currentUser!.uid);
-            if (data.data()!["isUser"].toString() == "true"){
-              Get.offAll(() => const MainView());
-            }else{
-              Get.offAll(() => const SellerMainView());
-            }
+      () async {
+        if (AppFirebase.currentUser == null) {
+          Get.off(() => const LoginView());
+        } else {
+          final DocumentSnapshot<Map<String, dynamic>> data =
+              await FirestoreServices.getUserRole(id: AppFirebase.currentUser!.uid);
+          if (data.data()!["isUser"].toString() == "true") {
+            Get.offAll(() => const MainView());
+          } else {
+            Get.offAll(() => const SellerMainView());
           }
+        }
       },
     );
   }
@@ -53,8 +54,8 @@ class _SplashViewState extends State<SplashView> {
             5.heightBox,
             AppStrings.appVersion.text.white.make(),
             const Spacer(),
-            AppStrings.credits.text.white.fontFamily(AppStyles.semiBold).make(),
-            30.heightBox,
+            // AppStrings.credits.text.white.fontFamily(AppStyles.semiBold).make(),
+            // 30.heightBox,
           ],
         ),
       ),

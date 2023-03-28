@@ -87,7 +87,7 @@ class CategoryDetailsView extends StatelessWidget {
                                     .ellipsis
                                     .make(),
                                 10.heightBox,
-                                "\$${product.price}"
+                                "EGP ${product.price}"
                                     .text
                                     .color(AppColors.redColor)
                                     .fontFamily(AppStyles.bold)

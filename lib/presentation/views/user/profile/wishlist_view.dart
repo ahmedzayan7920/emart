@@ -50,7 +50,7 @@ class WishlistView extends StatelessWidget {
                                   .color(AppColors.darkFontGrey)
                                   .make(),
                               10.heightBox,
-                              "\$${products[index].price}"
+                              "EGP ${products[index].price}"
                                   .text
                                   .size(16)
                                   .fontFamily(AppStyles.semiBold)

@@ -95,7 +95,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                       ],
                     ),
                     10.heightBox,
-                    "\$${widget.product.price}"
+                    "EGP ${widget.product.price}"
                         .text
                         .color(AppColors.redColor)
                         .size(18)
@@ -226,25 +226,17 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                             15.widthBox,
                             Column(
                               children: [
-                                // Obx(
-                                //   () => "\$${controller.totalPrice.value + widget.product.shippingPrice}"
-                                //       .text
-                                //       .color(AppColors.redColor)
-                                //       .fontFamily(AppStyles.bold)
-                                //       .size(16)
-                                //       .make(),
-                                // ),
                                 Row(
                                   children: [
                                     Obx(
-                                      () => "\$${controller.totalPrice.value}"
+                                      () => "EGP ${controller.totalPrice.value}"
                                           .text
                                           .color(AppColors.redColor)
                                           .fontFamily(AppStyles.bold)
                                           .size(16)
                                           .make(),
                                     ),
-                                    " + \$${widget.product.shippingPrice}"
+                                    " + EGP ${widget.product.shippingPrice}"
                                         .text
                                         .color(AppColors.redColor)
                                         .fontFamily(AppStyles.bold)
@@ -314,7 +306,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                                               .fontFamily(AppStyles.semiBold)
                                               .make(),
                                           10.heightBox,
-                                          "\$${products[index].price}"
+                                          "EGP ${products[index].price}"
                                               .text
                                               .color(AppColors.redColor)
                                               .fontFamily(AppStyles.bold)

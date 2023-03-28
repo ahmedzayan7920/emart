@@ -74,7 +74,7 @@ class OrdersView extends StatelessWidget {
                             ),
                           ),
                           10.widthBox,
-                          "\$${orders[index].totalPrice}"
+                          "EGP ${orders[index].totalPrice}"
                               .text
                               .size(16)
                               .fontFamily(AppStyles.semiBold)

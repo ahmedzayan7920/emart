@@ -82,9 +82,9 @@ class SellerOrderDetailsView extends StatelessWidget {
                               18.heightBox,
                               CustomDetailsRow(
                                 title1: "Product Price",
-                                detail1: "\$${order.productPrice}",
+                                detail1: "EGP ${order.productPrice}",
                                 title2: "Shipping Price",
-                                detail2: "\$${order.shippingPrice}",
+                                detail2: "EGP ${order.shippingPrice}",
                                 color1: AppColors.redColor,
                                 color2: AppColors.redColor,
                               ),
@@ -94,7 +94,7 @@ class SellerOrderDetailsView extends StatelessWidget {
                                 detail1:
                                     "${order.address.address}\n${order.address.city}\n${order.address.state}\n${order.address.country}\n${order.address.postalCode}\n${order.address.phone}",
                                 title2: "Total Amount",
-                                detail2: "\$${order.totalPrice}",
+                                detail2: "EGP ${order.totalPrice}",
                                 color2: AppColors.redColor,
                               ),
                             ],
@@ -133,7 +133,7 @@ class SellerOrderDetailsView extends StatelessWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  "\$${order.productPrice}"
+                                  "EGP ${order.productPrice}"
                                       .text
                                       .size(16)
                                       .fontFamily(AppStyles.semiBold)
