@@ -1,8 +1,7 @@
-import 'package:emart/models/message_model.dart';
-
 import 'package:intl/intl.dart' as intl;
 
 import '../../../../../consts/app_consts.dart';
+import '../../../../../models/message_model.dart';
 
 class CustomMessageItem extends StatelessWidget {
   const CustomMessageItem({Key? key, required this.message}) : super(key: key);

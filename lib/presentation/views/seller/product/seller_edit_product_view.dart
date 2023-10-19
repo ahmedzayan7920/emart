@@ -249,8 +249,8 @@ class _SellerEditProductViewState extends State<SellerEditProductView> {
                   width: double.infinity,
                   height: double.infinity,
                   color: Colors.grey.withOpacity(.4),
-                  child: Column(
-                    children: const [
+                  child: const Column(
+                    children: [
                       SafeArea(child: LinearProgressIndicator()),
                     ],
                   ),

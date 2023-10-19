@@ -1,4 +1,4 @@
-import 'package:emart/consts/app_consts.dart';
+import 'app_consts.dart';
 
 abstract class AppLists {
   static const sliderItems = [
