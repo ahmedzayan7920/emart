@@ -1,5 +1,5 @@
 abstract class AppStrings {
-  static const appName = "Ennovation";
+  static const appName = "E-Mart";
   static const appVersion = "Version 1.0.0";
   static const credits = "@Ahmed Zayan";
   static const name = "Name";

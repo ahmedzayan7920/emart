@@ -1,7 +1,7 @@
 import '../../consts/app_consts.dart';
 
 class CustomHomeButton extends StatelessWidget {
-  const CustomHomeButton({Key? key, required this.title, required this.imagePath, required this.height,}) : super(key: key);
+  const CustomHomeButton({super.key, required this.title, required this.imagePath, required this.height,});
 
   final String title;
   final String imagePath;
