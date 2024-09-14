@@ -17,7 +17,10 @@
 
 <h2>Demo Video</h2>
 <p>Watch the demo video to see eMart in action:</p>
-<p><a href="https://github.com/ahmedzayan7920/emart/assets/88338596/3e654f8e-d5df-4238-bc2a-7e8b39d2b8ad">Demo Video</a></p>
+<p><a href="https://github.com/user-attachments/assets/3559d460-3b4a-4a4f-98e1-5f6e3eae0ccd">Demo Video</a></p>
+
+
+
 
 <h2>Installation</h2>
 <p>To get started with eMart, follow these steps:</p>
